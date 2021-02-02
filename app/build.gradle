@@ -1,0 +1,77 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.jakewharton.butterknife'
+
+android {
+    compileSdkVersion gradle.ext.compileSdkVersion
+    buildToolsVersion gradle.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion gradle.ext.minSdkVersion
+        targetSdkVersion gradle.ext.targetSdkVersion
+        applicationId "com.hlsp.video"
+        versionCode 4
+        versionName "1.0.3"
+
+        multiDexEnabled true
+
+        ndk {
+            abiFilters /*"armeabi",*/ "armeabi-v7a"/*,"x86","arm64-v8a"*/
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+
+        release {
+            minifyEnabled false
+            // 移除无用的resource文件
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+
+    lintOptions {
+        abortOnError false
+    }
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':library')
+    implementation project(':CygWidget')
+
+    implementation "com.android.support:design:$gradle.ext.supportLibraryVersion"
+
+    //ButterKnife
+    implementation('com.jakewharton:butterknife:8.7.0') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-compat'
+    }
+
+    implementation 'me.everything:overscroll-decor-android:1.0.4'
+
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'com.android.support:multidex:1.0.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0'
+    debugImplementation 'com.apkfuns.logutils:library:1.5.1.1'
+    releaseImplementation 'com.apkfuns.logutils:logutils-no-op:1.5.1.1'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+
+    implementation 'com.facebook.fresco:fresco:1.7.1'
+    implementation 'com.facebook.fresco:animated-webp:1.7.1'
+    implementation 'com.facebook.fresco:webpsupport:1.7.1'
+
+    implementation 'com.facebook.soloader:soloader:0.3.0' //webp需要引用这个库
+}
